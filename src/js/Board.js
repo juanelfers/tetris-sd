@@ -3,7 +3,7 @@ class Board {
     #height;
     #pieces = [];
 
-    constructor (container, width, height) {
+    constructor(container, width, height) {
         // type: square, line, L
         this.container = container;
         this.#width = width;
@@ -11,10 +11,28 @@ class Board {
     }
 
     draw() {
-        const cells = this.#width * this.#height;
-        this.container.innerHTML = '<div class="cell"></div>'.repeat(cells);
+        this.container.innerHTML = '';
 
-        console.log(this.#pieces)
+        console.log(this.#pieces.map(p => p.getCoordinates()))
+
+        for (let y = 1; y <= this.#height; y++) {
+            for (let x = 1; x <= this.#width; x++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                this.container.appendChild(cell);
+
+                for (const piece of this.#pieces) {
+                    const { coordinates, color } = piece.getCoordinates();
+                    console.log({coordinates})
+                    for (const { x: xPos, y: yPos } of coordinates) {
+                        if (x === xPos && y === yPos) {
+                            console.log('MATCH')
+                            cell.style.background = color;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     addPiece(piece) {
